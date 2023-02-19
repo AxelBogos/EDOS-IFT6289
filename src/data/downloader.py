@@ -44,6 +44,7 @@ class GoogleDriveDownloader:
             "test_task_b_entries.csv": "https://drive.google.com/file/d/1WniGdTKzlalchoPrntxyTAI6n9aRGnVB/view?usp=share_link",
             "test_task_c_entries.csv": "https://drive.google.com/file/d/1u0FB_K11WAyHbmOy2M_25nJ5XxEpSyH5/view?usp=share_link",
             "train_all_tasks.csv": "https://drive.google.com/file/d/1XVJMR4j_-_C_6D-tfIh6_KrYYhv7bv8R/view?usp=share_link",
+            "edos_labelled_aggregated.csv": "https://drive.google.com/file/d/1wzu_ERah3iTTt3gWZY342c7GFZSUlPLJ/view?usp=share_link",
         }
         default_unlabeled_file_links = {
             "gab_1M_unlabelled.csv": "https://drive.google.com/file/d/1Uh4IP7Al779bZWf-UVW963osF-WrKCAI/view?usp=share_link",
