@@ -1,10 +1,11 @@
+from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
+import pandas as pd
 import torch
 from downloader import GoogleDriveDownloader
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import ConcatDataset, DataLoader, Dataset, random_split
-from torchvision.transforms import transforms
+from torch.utils.data import DataLoader, Dataset
 
 
 class EDOSDataModule(LightningDataModule):
@@ -34,8 +35,7 @@ class EDOSDataModule(LightningDataModule):
         self,
         data_dir: str = "data/",
         preprocessing: str = "standard",
-        task: str = "A",
-        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
+        task: str = "a",
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -45,6 +45,10 @@ class EDOSDataModule(LightningDataModule):
         # this line allows to access init params with 'self.hparams' attribute
         # also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False)
+
+        self.raw_data_train: Optional[pd.DataFrame] = None
+        self.raw_data_val: Optional[pd.DataFrame] = None
+        self.raw_data_test: Optional[pd.DataFrame] = None
 
         # data transformations
 
@@ -57,11 +61,11 @@ class EDOSDataModule(LightningDataModule):
 
     @property
     def num_classes(self):
-        if self.hparams.task == "A":
+        if self.hparams.task == "a":
             return 2
-        elif self.hparams.task == "B":
+        elif self.hparams.task == "b":
             return 4
-        elif self.hparams.task == "C":
+        elif self.hparams.task == "c":
             return 11
 
     def prepare_data(self):
@@ -69,7 +73,9 @@ class EDOSDataModule(LightningDataModule):
 
         Do not use it to assign state (self.x = y).
         """
-        self.downloader_handler.download()
+        self.download_handler.download()
+        data_path = self.download_handler.output_dir
+        self.raw_data_train = pd.read_csv(Path(data_path))
 
     def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
