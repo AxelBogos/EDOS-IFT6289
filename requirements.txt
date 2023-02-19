@@ -1,4 +1,12 @@
 # --------- our project additions --------- #
+jupyter
+gdown
+pandas
+scikit-learn
+matplotlib
+seaborn
+wordcloud
+spacy
 # --------- pytorch --------- #
 torch>=1.10.0
 torchvision>=0.11.0
