@@ -17,149 +17,6 @@ class FilePreprocessor:
 
         :param self: Access variables that belong to the class
         :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing, but it does write out the data to disk
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: Nothing
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: None
-        :doc-author: Trelent
-        """
-        """
-        The run function is the entry point for this module. It does three things:
-            1. Loads the data from a CSV file into a pandas DataFrame object
-            2. Merges that DataFrame with another CSV file containing labels and other metadata
-            3. Encode targets to integers (train,val test sets)
-            3. Saves the merged datasets to disk as a new CSV file
-
-        :param self: Access variables that belong to the class
-        :return: None
         """
         pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
@@ -232,6 +89,14 @@ class FilePreprocessor:
         all_tasks_data: Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame],
         full_data: pd.DataFrame,
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        """The merge_labels_wrapper function takes in the dataframes for each task, and merges them
+        with the full_data dataframe.
+
+        :param self: Access the attributes of the class
+        :param all_tasks_data:Tuple[pd.DataFrame: Pass the data from all tasks to the merge_labels_wrapper function
+        :param full_data:pd.DataFrame: Pass the full dataset with all labels to the merge function
+        :return: A tuple of 3 dataframes
+        """
         task_a_set, task_b_set, task_c_set = all_tasks_data
         task_a_labelled = self.merge(task_a_set, full_data, "label_sexist")
         task_b_labelled = self.merge(task_b_set, full_data, "label_category")
@@ -240,10 +105,17 @@ class FilePreprocessor:
 
     @staticmethod
     def save_csv_wrapper(all_tasks_data, set_prefix: str, data_root: str) -> None:
+        """The save_csv_wrapper function saves the dataframes in all_tasks_data to csv files.
+
+        :param all_tasks_data: Store the dataframes for each task
+        :param set_prefix:str: a string that is used as part of the filename when saving the csv file. "dev" or "test".
+        :param data_root:str: Specify the path to where the data should be saved
+        :return: None
+        """
         task_a_set, task_b_set, task_c_set = all_tasks_data
         task_a_set.to_csv(Path(data_root, f"{set_prefix}_task_a_labelled.csv"), index=False)
-        task_b_set.to_csv(Path(data_root, f"{set_prefix}_task_a_labelled.csv"), index=False)
-        task_c_set.to_csv(Path(data_root, f"{set_prefix}_task_a_labelled.csv"), index=False)
+        task_b_set.to_csv(Path(data_root, f"{set_prefix}_task_b_labelled.csv"), index=False)
+        task_c_set.to_csv(Path(data_root, f"{set_prefix}_task_c_labelled.csv"), index=False)
 
     @staticmethod
     def encode_target(
@@ -254,10 +126,9 @@ class FilePreprocessor:
         the encoding_dict. The function returns this new DataFrame.
 
         :param df:pd.DataFrame: Specify the dataframe that we want to encode
-        :param encoding_dict:dict: Encode the target column
+        :param encoding_dict:dict: Dict mapping of the target column to integer
         :param target:str='target': Specify the name of the target column
         :return: The dataframe with the target column encoded
-        :doc-author: Trelent
         """
         df[target].replace(encoding_dict, inplace=True)
         df[target] = df[target].astype(int)
@@ -266,6 +137,15 @@ class FilePreprocessor:
     def encode_target_wrapper(
         self, all_tasks_data: Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
     ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        """The encode_target_wrapper function is a wrapper function that takes in the data for all
+        three tasks, and returns the encoded dataframes for each task. This is done by calling the
+        encode_target function on each of the tasks individually and then returning them as a
+        tuple.
+
+        :param self: Access the attributes and methods of the class in python
+        :param all_tasks_data:Tuple[pd.DataFrame,..]: Pass the dataframes that contain the training, validation and test sets
+        :return: The encoded dataframes for the 3 tasks
+        """
         task_a_set, task_b_set, task_c_set = all_tasks_data
         task_a_set_encoded = self.encode_target(task_a_set, self._get_task_a_target_encoding)
         task_b_set_encoded = self.encode_target(task_b_set, self._get_task_b_target_encoding)
@@ -280,6 +160,15 @@ class FilePreprocessor:
         Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame],
         Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame],
     ]:
+        """The load_data function loads the data from the specified directory. It returns a tuple
+        of three elements: 1) The training set, which is a Pandas DataFrame containing 2) The val
+        sets of each task which is a tuple of 3 dataframes 3) the tests set of each task which is a
+        tuple of 3 dataframes.
+
+        :param data_root:str: Specify the path to the directory where our data is stored
+        :return: Tuple[pd.DataFrame, Tuple, Tuple]
+        """
+
         # Load train set
         train_set = pd.read_csv(Path(data_root, "train_all_tasks.csv"))
 
@@ -301,20 +190,38 @@ class FilePreprocessor:
 
     @property
     def _get_task_a_target_encoding(self) -> dict:
+        """The _get_task_a_target_encoding function returns a dictionary mapping the target labels
+        for task A to numbers.
+
+        :param self: Access the attributes and methods of the class
+        :return: A dictionary that maps the target labels to integers
+        """
         return {"not sexist": 0, "sexist": 1}
 
     @property
     def _get_task_b_target_encoding(self) -> dict:
+        """The _get_task_b_target_encoding function returns a dictionary mapping the target labels
+        for task B to numbers.
+
+        :param self: Access the attributes and methods of the class
+        :return: A dictionary that maps the target labels to integers
+        """
         return {
             "1. threats, plans to harm and incitement": 0,
             "2. derogation": 1,
             "3. animosity": 2,
             "4. prejudiced discussions": 3,
-            "none": np.nan,
+            "none": -1,
         }
 
     @property
     def _get_task_c_target_encoding(self) -> dict:
+        """The _get_task_b_target_encoding function returns a dictionary mapping the target labels
+        for task C to numbers.
+
+        :param self: Access the attributes and methods of the class
+        :return: A dictionary that maps the target labels to integers
+        """
         return {
             "1.1 threats of harm": 0,
             "1.2 incitement and encouragement of harm": 1,
@@ -327,7 +234,7 @@ class FilePreprocessor:
             "3.4 condescending explanations or unwelcome advice": 8,
             "4.1 supporting mistreatment of individual women": 9,
             "4.2 supporting systemic discrimination against women as a group": 10,
-            "none": np.nan,
+            "none": -1,
         }
 
 
