@@ -30,21 +30,58 @@ class FilePreprocessor:
         # Return the merged dataframe
         return merged_df
 
+    def run(self) -> None:
+        """
+        The run function is the entry point for this module. It does three things:
+            1. Loads the data from a CSV file into a pandas DataFrame object
+            2. Merges that DataFrame with another CSV file containing labels and other metadata
+            3. Saves the merged dataset to disk as a new CSV file
+
+        :param self: Access variables that belong to the class
+        :return: None
+        """
+        pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+
+        data_root = Path(pyrootutils.find_root(), "data", "edos_raw").resolve().as_posix()
+
+        all_data = pd.read_csv(os.path.join(data_root, "edos_labelled_aggregated.csv"))
+
+        # Load dev sets
+        dev_task_a = pd.read_csv(os.path.join(data_root, "dev_task_a_entries.csv"))
+        dev_task_b = pd.read_csv(os.path.join(data_root, "dev_task_b_entries.csv"))
+        dev_task_c = pd.read_csv(os.path.join(data_root, "dev_task_c_entries.csv"))
+
+        # Load test sets
+        test_task_a = pd.read_csv(os.path.join(data_root, "test_task_a_entries.csv"))
+        test_task_b = pd.read_csv(os.path.join(data_root, "test_task_b_entries.csv"))
+        test_task_c = pd.read_csv(os.path.join(data_root, "test_task_c_entries.csv"))
+
+        # Merge dev sets
+        dev_task_a_labelled = self.merge(dev_task_a, all_data, "label_sexist")
+        dev_task_b_labelled = self.merge(dev_task_b, all_data, "label_category")
+        dev_task_c_labelled = self.merge(dev_task_c, all_data, "label_vector")
+
+        # Merge test sets
+        test_task_a_labelled = self.merge(test_task_a, all_data, "label_sexist")
+        test_task_b_labelled = self.merge(test_task_b, all_data, "label_category")
+        test_task_c_labelled = self.merge(test_task_c, all_data, "label_vector")
+
+        # Save merged dev tests
+        dev_task_a_labelled.to_csv(os.path.join(data_root, "dev_task_a_labelled.csv"), index=False)
+        dev_task_b_labelled.to_csv(os.path.join(data_root, "dev_task_b_labelled.csv"), index=False)
+        dev_task_c_labelled.to_csv(os.path.join(data_root, "dev_task_c_labelled.csv"), index=False)
+
+        # Save merged test sets
+        test_task_a_labelled.to_csv(
+            os.path.join(data_root, "test_task_a_labelled.csv"), index=False
+        )
+        test_task_b_labelled.to_csv(
+            os.path.join(data_root, "test_task_b_labelled.csv"), index=False
+        )
+        test_task_c_labelled.to_csv(
+            os.path.join(data_root, "test_task_c_labelled.csv"), index=False
+        )
+
 
 if __name__ == "__main__":
-    pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
-
-    data_root = Path(pyrootutils.find_root(), "data", "edos_raw").resolve().as_posix()
-
-    all_data = pd.read_csv(os.path.join(data_root, "edos_labelled_aggregated.csv"))
-    dev_task_a = pd.read_csv(os.path.join(data_root, "dev_task_a_entries.csv"))
-    dev_task_b = pd.read_csv(os.path.join(data_root, "dev_task_b_entries.csv"))
-    dev_task_c = pd.read_csv(os.path.join(data_root, "dev_task_c_entries.csv"))
-
-    dev_task_a_labelled = FilePreprocessor.merge(dev_task_a, all_data, "label_sexist")
-    dev_task_b_labelled = FilePreprocessor.merge(dev_task_b, all_data, "label_category")
-    dev_task_c_labelled = FilePreprocessor.merge(dev_task_c, all_data, "label_vector")
-
-    dev_task_a_labelled.to_csv(os.path.join(data_root, "dev_task_a_labelled.csv"), index=False)
-    dev_task_b_labelled.to_csv(os.path.join(data_root, "dev_task_b_labelled.csv"), index=False)
-    dev_task_c_labelled.to_csv(os.path.join(data_root, "dev_task_c_labelled.csv"), index=False)
+    FilePreprocessor().run()
