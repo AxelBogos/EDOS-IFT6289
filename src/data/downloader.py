@@ -9,18 +9,22 @@ class GoogleDriveDownloader:
     """Downloader wrapper class. It implements the following:
 
     - def __init__(...):
-        - Sets up the download links and internal states of the downloader such as the outputh path
+        - Sets up the download links and internal states of the downloader such as the output path
     - def download(...):
         - Executes the downloading of all requested files.
     - def _download_file_helper(...)
         - Executes the download of a single file
     - def _verify_output_dir(...)
         - Asserts output dir a valid existing dir
+    - def _get_default_file_links(...):
+        - Property definition of default GDrive file links
+    - def _get_default_unlabeled_file_links(...):
+        - Property definition of default unlabelled GDrive file links
     """
 
     def __init__(
         self,
-        output_dir: str = "edos_raw",
+        output_dir: str = None,
         download_unlabeled: bool = False,
         links_dict: dict = None,
     ) -> None:
@@ -34,31 +38,19 @@ class GoogleDriveDownloader:
         :param : Define the output directory
         :return: None
         """
+        # Default output dir
+        if output_dir is None:
+            pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+            self.output_dir = Path(pyrootutils.find_root(), "data", "edos_raw")
+        else:
+            self.output_dir = output_dir
 
-        pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
-        default_files_links = {
-            "dev_task_a_entries.csv": "https://drive.google.com/file/d/1gEH44dxE0jH87C-JHLxDnqMRvKbHXwxA/view?usp=share_link",
-            "dev_task_b_entries.csv": "https://drive.google.com/file/d/169_3cdbeU3x3PO9TUD1CL6wmqLNRxZz_/view?usp=share_link",
-            "dev_task_c_entries.csv": "https://drive.google.com/file/d/1FhHM7x-MFw0e4T31vzzyddwKVhc2Rnk3/view?usp=share_link",
-            "test_task_a_entries.csv": "https://drive.google.com/file/d/1uOtCjiqYUGjECUfbr2VTkE7NUZ7bBD4P/view?usp=share_link",
-            "test_task_b_entries.csv": "https://drive.google.com/file/d/1WniGdTKzlalchoPrntxyTAI6n9aRGnVB/view?usp=share_link",
-            "test_task_c_entries.csv": "https://drive.google.com/file/d/1u0FB_K11WAyHbmOy2M_25nJ5XxEpSyH5/view?usp=share_link",
-            "train_all_tasks.csv": "https://drive.google.com/file/d/1XVJMR4j_-_C_6D-tfIh6_KrYYhv7bv8R/view?usp=share_link",
-            "edos_labelled_aggregated.csv": "https://drive.google.com/file/d/1wzu_ERah3iTTt3gWZY342c7GFZSUlPLJ/view?usp=share_link",
-        }
-        default_unlabeled_file_links = {
-            "gab_1M_unlabelled.csv": "https://drive.google.com/file/d/1Uh4IP7Al779bZWf-UVW963osF-WrKCAI/view?usp=share_link",
-            "reddit_1M_unlabelled.csv": "https://drive.google.com/file/d/1LGpUv7bBHepmdu5E5JlICOf47wQJy3IZ/view?usp=share_link",
-        }
         self.download_unlabeled = download_unlabeled
         if links_dict is None:
-            self.links_dict = default_files_links
-            self.unlabeled_links_dict = default_unlabeled_file_links
+            self.links_dict = self._get_default_file_links
+            self.unlabeled_links_dict = self._get_default_unlabeled_file_links
         else:
             self.links_dict = links_dict
-
-        root_data_dir = Path(pyrootutils.find_root(), "data").resolve().as_posix()
-        self.output_dir = Path(root_data_dir, output_dir)
 
     def download(self) -> None:
         """The download function downloads the data from the links specified in the links_dict. It
@@ -113,6 +105,41 @@ class GoogleDriveDownloader:
         else:
             os.mkdir(self.output_dir)
             print(f"Directory {self.output_dir} created. Continuing.")
+
+    @property
+    def _get_default_file_links(self):
+        """The _get_default_file_links function returns a dictionary of default file links. The
+        keys are the filenames and the values are the corresponding Google Drive shareable links.
+
+        :param self: Access variables that belongs to the class
+        :return: A dictionary of default file links
+        """
+        default_files_links = {
+            "dev_task_a_entries.csv": "https://drive.google.com/file/d/1gEH44dxE0jH87C-JHLxDnqMRvKbHXwxA/view?usp=share_link",
+            "dev_task_b_entries.csv": "https://drive.google.com/file/d/169_3cdbeU3x3PO9TUD1CL6wmqLNRxZz_/view?usp=share_link",
+            "dev_task_c_entries.csv": "https://drive.google.com/file/d/1FhHM7x-MFw0e4T31vzzyddwKVhc2Rnk3/view?usp=share_link",
+            "test_task_a_entries.csv": "https://drive.google.com/file/d/1uOtCjiqYUGjECUfbr2VTkE7NUZ7bBD4P/view?usp=share_link",
+            "test_task_b_entries.csv": "https://drive.google.com/file/d/1WniGdTKzlalchoPrntxyTAI6n9aRGnVB/view?usp=share_link",
+            "test_task_c_entries.csv": "https://drive.google.com/file/d/1u0FB_K11WAyHbmOy2M_25nJ5XxEpSyH5/view?usp=share_link",
+            "train_all_tasks.csv": "https://drive.google.com/file/d/1XVJMR4j_-_C_6D-tfIh6_KrYYhv7bv8R/view?usp=share_link",
+            "edos_labelled_aggregated.csv": "https://drive.google.com/file/d/1wzu_ERah3iTTt3gWZY342c7GFZSUlPLJ/view?usp=share_link",
+        }
+        return default_files_links
+
+    @property
+    def _get_default_unlabeled_file_links(self):
+        """The _get_default_unlabeled_file_links function returns a dictionary of default unlabeled
+        file links. The keys are the names of the files and the values are their corresponding
+        Google Drive links.
+
+        :param self: Allow a method to refer to the calling object
+        :return: A dictionary of default unlabeled file links
+        """
+        default_unlabeled_file_links = {
+            "gab_1M_unlabelled.csv": "https://drive.google.com/file/d/1Uh4IP7Al779bZWf-UVW963osF-WrKCAI/view?usp=share_link",
+            "reddit_1M_unlabelled.csv": "https://drive.google.com/file/d/1LGpUv7bBHepmdu5E5JlICOf47wQJy3IZ/view?usp=share_link",
+        }
+        return default_unlabeled_file_links
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ from typing import Any, Dict, Optional, Tuple
 import pandas as pd
 import torch
 from downloader import GoogleDriveDownloader
+from file_preprocessing import FilePreprocessor
+from preprocessing import TextPreprocessor
 from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset
 
@@ -33,7 +35,7 @@ class EDOSDataModule(LightningDataModule):
 
     def __init__(
         self,
-        data_dir: str = "data/",
+        data_dir: str = Path("..", "..", "data", "edos_raw").resolve().as_posix(),
         preprocessing: str = "standard",
         task: str = "a",
         batch_size: int = 64,
@@ -50,14 +52,14 @@ class EDOSDataModule(LightningDataModule):
         self.raw_data_val: Optional[pd.DataFrame] = None
         self.raw_data_test: Optional[pd.DataFrame] = None
 
-        # data transformations
-
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
 
-        # download handler
+        # data preparation handlers
         self.download_handler = GoogleDriveDownloader()
+        self.text_preprocessor = TextPreprocessor()
+        self.file_processor = FilePreprocessor()
 
     @property
     def num_classes(self):
@@ -69,13 +71,32 @@ class EDOSDataModule(LightningDataModule):
             return 11
 
     def prepare_data(self):
-        """Download data if needed.
-
-        Do not use it to assign state (self.x = y).
-        """
         self.download_handler.download()
-        data_path = self.download_handler.output_dir
-        self.raw_data_train = pd.read_csv(Path(data_path))
+        train_path = Path(self.hparams.data_dir, "train_all_tasks.csv").resolve().as_posix()
+        val_path = (
+            Path(self.hparams.data_dir, f"dev_task_{self.hparams.task}_labelled.csv")
+            .resolve()
+            .as_posix()
+        )
+        test_path = (
+            Path(self.hparams.data_dir, f"test_task_{self.hparams.task}_labelled.csv")
+            .resolve()
+            .as_posix()
+        )
+
+        self.raw_data_train = pd.read_csv(train_path)
+        self.raw_data_val = pd.read_csv(val_path)
+        self.raw_data_test = pd.read_csv(test_path)
+
+        # ----- QUICK TESTING PURPOSE, !REMOVE! --------
+        self.raw_data_train = self.raw_data_train.iloc[0:500]
+        self.raw_data_val = self.raw_data_val.iloc[0:100]
+        self.raw_data_test = self.raw_data_test.iloc[0:100]
+        # -----------------------------------------
+
+        self.raw_data_train["text"] = self.text_preprocessor.transform(self.raw_data_train["text"])
+        self.raw_data_val["text"] = self.text_preprocessor.transform(self.raw_data_val["text"])
+        self.raw_data_test["text"] = self.text_preprocessor.transform(self.raw_data_test["text"])
 
     def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
@@ -135,4 +156,5 @@ class EDOSDataModule(LightningDataModule):
 
 
 if __name__ == "__main__":
-    _ = EDOSDataModule()
+    datamodule = EDOSDataModule()
+    datamodule.prepare_data()
