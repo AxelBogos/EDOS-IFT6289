@@ -6,12 +6,34 @@ import pyrootutils
 
 
 class GoogleDriveDownloader:
+    """Downloader wrapper class. It implements the following:
+
+    - def __init__(...):
+        - Sets up the download links and internal states of the downloader such as the outputh path
+    - def download(...):
+        - Executes the downloading of all requested files.
+    - def _download_file_helper(...)
+        - Executes the download of a single file
+    - def _verify_output_dir(...)
+        - Asserts output dir a valid existing dir
+    """
+
     def __init__(
         self,
         output_dir: str = "edos_raw",
         download_unlabeled: bool = False,
         links_dict: dict = None,
     ) -> None:
+        """The __init__ function is called when an instance of the class is created. It initializes
+        attributes that are common to all instances of the class.
+
+        :param self: Reference the object instance
+        :param output_dir:str=&quot;edos_raw&quot;: Specify the name of the folder where all data will be downloaded
+        :param download_unlabeled:bool=False: Download the unlabeled data
+        :param links_dict:dict=None: Pass a dictionary of links to the class
+        :param : Define the output directory
+        :return: None
+        """
 
         pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
         default_files_links = {
@@ -38,7 +60,14 @@ class GoogleDriveDownloader:
         self.output_dir = Path(root_data_dir, output_dir)
 
     def download(self) -> None:
-        self.verify_output_dir()
+        """The download function downloads the data from the links specified in the links_dict. It
+        then saves them to a folder self.output_dir. If you wish to download unlabeled data, set
+        download_unlabeled=True.
+
+        :param self: Reference the class object
+        :return: None
+        """
+        self._verify_output_dir()
 
         for file_name, url in self.links_dict.items():
             self._download_file_helper(file_name, url)
@@ -54,19 +83,35 @@ class GoogleDriveDownloader:
             self._download_file_helper(file_name, url)
         print("Download done.")
 
-    def verify_output_dir(self) -> None:
-        if os.path.isdir(self.output_dir):
-            print(f"Directory {self.output_dir} already exists. Continuing.")
-        else:
-            os.mkdir(self.output_dir)
-            print(f"Directory {self.output_dir} created. Continuing.")
-
     def _download_file_helper(self, file_name: str, url: str) -> None:
+        """The _download_file_helper function downloads a file from the given url to the specified
+        output directory. If the file already exists in that directory, it will not be downloaded
+        again.
+
+        :param self: Access the attributes of the class
+        :param file_name:str: Specify the name of the file that will be downloaded
+        :param url:str: Specify the url of the file that is to be downloaded
+        :return: None
+        """
         output_path = Path(self.output_dir, file_name).resolve().as_posix()
         if os.path.isfile(output_path):
             print(f"{file_name} already exists in {self.output_dir}. Continuing.")
             return
         gdown.download(url, output_path, quiet=False, fuzzy=True)
+
+    def _verify_output_dir(self) -> None:
+        """The _verify_output_dir function checks if the output directory already exists. If it
+        does, the function prints a message and continues. If not, the function creates the
+        directory and prints a message.
+
+        :param self: Refer to the object itself
+        :return: None
+        """
+        if os.path.isdir(self.output_dir):
+            print(f"Directory {self.output_dir} already exists. Continuing.")
+        else:
+            os.mkdir(self.output_dir)
+            print(f"Directory {self.output_dir} created. Continuing.")
 
 
 if __name__ == "__main__":
