@@ -1,7 +1,8 @@
 _target_: src.data.edos_datamodule.EDOSDataModule
 data_dir: ${paths.data_dir}
 preprocessing: standard
-task: A
+task: a
+max_length: 512
 batch_size: 128
 num_workers: 0
 pin_memory: False

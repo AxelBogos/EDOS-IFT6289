@@ -1,12 +1,18 @@
 from pathlib import Path
 from typing import Tuple
 
-import numpy as np
 import pandas as pd
 import pyrootutils
 
 
 class FilePreprocessor:
+    def __init__(self, data_root=None):
+        if data_root is None:
+            pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
+            self.data_root = Path(pyrootutils.find_root(), "data", "edos_raw").resolve().as_posix()
+        else:
+            self.data_root = data_root
+
     def run(self) -> None:
         """
         The run function is the entry point for this module. It does three things:
@@ -18,13 +24,10 @@ class FilePreprocessor:
         :param self: Access variables that belong to the class
         :return: Nothing, but it does write out the data to disk
         """
-        pyrootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
-        data_root = Path(pyrootutils.find_root(), "data", "edos_raw").resolve().as_posix()
+        full_data = pd.read_csv(Path(self.data_root, "edos_labelled_aggregated.csv"))
 
-        full_data = pd.read_csv(Path(data_root, "edos_labelled_aggregated.csv"))
-
-        train_all_tasks, dev_sets, test_sets = self.load_data(data_root)
+        train_all_tasks, dev_sets, test_sets = self.load_data(self.data_root)
 
         # Merge dev sets
         dev_sets_labelled = self.merge_labels_wrapper(dev_sets, full_data)
@@ -51,14 +54,14 @@ class FilePreprocessor:
 
         # Save encoded train set
         train_all_tasks_encoded.to_csv(
-            Path(data_root, "train_all_tasks_target_encoded.csv"), index=False
+            Path(self.data_root, "train_all_tasks_target_encoded.csv"), index=False
         )
 
         # Save merged dev tests
-        self.save_csv_wrapper(dev_sets_labelled, "dev", data_root)
+        self.save_csv_wrapper(dev_sets_labelled, "dev", self.data_root)
 
         # Save merged test sets
-        self.save_csv_wrapper(test_sets_labelled, "test", data_root)
+        self.save_csv_wrapper(test_sets_labelled, "test", self.data_root)
 
     @staticmethod
     def merge(feature_df: pd.DataFrame, labels_df: pd.DataFrame, label_col: str) -> pd.DataFrame:
