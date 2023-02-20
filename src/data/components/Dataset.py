@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 from torch.utils.data import Dataset
@@ -10,7 +10,7 @@ class GenericDataset(Dataset):
     def __init__(
         self,
         data: np.array,
-        tokenizer: Union[SpacyTokenizer],
+        tokenizer: Union[SpacyTokenizer],  # Include Bert.Tokenizer too eventually
         preprocessor: TextPreprocessor,
         max_length: int,
     ):

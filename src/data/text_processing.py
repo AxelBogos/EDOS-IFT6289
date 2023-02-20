@@ -1,6 +1,6 @@
 import re
 import string
-from typing import Any, Union
+from typing import Any
 
 import pandas as pd
 import spacy
@@ -42,7 +42,7 @@ class TextPreprocessor:
             - remove all punctuation from the text, if self.remove_punc is True;
 
         :param self: Allow the function to refer to and modify the attributes of the class
-        :param x: String to be modified
+        :param x: String to be modified.
         :return: Modified string
         """
         if self.lower_case:
@@ -115,10 +115,9 @@ class SpacyTokenizer:
         :param max_length:int: Specify the maximum number of tokens that should be returned
         :param lemmatize:bool=True: Lemmatize the input string
         :param truncation:bool=True: Determine if the input string should be truncated or not
-        :param padding:str="max_length": Specify the padding strategy
-        :param return_attention_mask:bool=True: Return the attention mask (a binary tensor) along with the input_ids
-        :param return_tensors:Any=None: Return the tensors in the format specified
-        :param : Determine the maximum length of the tokenized input
+        :param padding:str="max_length": Specify the padding strategy. Useless, mimics Bert.tokenizer.
+        :param return_attention_mask:bool=True: Return the attention mask (a binary tensor) along with the input_ids. Useless, mimics Bert.tokenizer.
+        :param return_tensors:Any=None: Return the tensors in the format specified. Useless, mimics Bert.tokenizer.
         :return: A dictionary with the input_ids and attention_mask as keys
         """
         tokens = [token.lemma_ if lemmatize else token for token in self.nlp(input_str)]
