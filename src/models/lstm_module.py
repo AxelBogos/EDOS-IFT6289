@@ -41,10 +41,11 @@ class LSTMModule(pl.LightningModule):
         self.val_f1_best.reset()
 
     def model_step(self, batch: Any):
-        x, y = batch
+        x, attention_mask, y = batch
         logits = self.forward(x)
         loss = self.criterion(logits, y)
         preds = torch.argmax(logits, dim=1)
+        preds = torch.unsqueeze(preds, -1)
         return loss, preds, y
 
     def training_step(self, batch: Any, batch_idx: int):

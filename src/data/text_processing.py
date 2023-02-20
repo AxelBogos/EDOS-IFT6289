@@ -1,9 +1,13 @@
 import re
 import string
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import pyrootutils
 import spacy
+import torch
+from torchtext.vocab import GloVe
 
 
 class TextPreprocessor:
@@ -93,8 +97,14 @@ class TextPreprocessor:
 
 
 class SpacyTokenizer:
-    def __init__(self):
+    def __init__(self, embed_length=300, cache=Path):
+        self.embed_length = embed_length
         self.nlp = spacy.load("en_core_web_sm")
+        self.global_vectors = GloVe(
+            name="840B",
+            dim=embed_length,
+            cache=Path(pyrootutils.find_root(), "data", ".vector_cache"),
+        )
 
     def encode_plus(
         self,
@@ -121,7 +131,12 @@ class SpacyTokenizer:
         :return: A dictionary with the input_ids and attention_mask as keys
         """
         tokens = [token.lemma_ if lemmatize else token for token in self.nlp(input_str)]
+        X_tensor = torch.zeros(max_length, self.embed_length)
         if truncation:
             tokens = tokens[:max_length]
+        if len(tokens) < max_length:
+            tokens = tokens + ["<pad>"] * (max_length - len(tokens))
+        for idx, token in enumerate(tokens):
+            X_tensor[idx] = self.global_vectors.get_vecs_by_tokens(token, lower_case_backup=True)
         attention_mask = [1] * len(tokens) + [0] * (max_length - len(tokens))
-        return {"input_ids": tokens, "attention_mask": attention_mask}
+        return {"input_ids": X_tensor, "attention_mask": attention_mask}

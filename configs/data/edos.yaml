@@ -1,6 +1,6 @@
 _target_: src.data.edos_datamodule.EDOSDataModule
 data_dir: ${paths.data_dir}
-preprocessing: standard
+preprocessing_mode: standard
 task: a
 max_length: 512
 batch_size: 128

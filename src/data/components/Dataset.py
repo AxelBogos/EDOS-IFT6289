@@ -1,6 +1,7 @@
 from typing import Union
 
 import numpy as np
+import torch
 from torch.utils.data import Dataset
 
 from src.data.text_processing import SpacyTokenizer, TextPreprocessor
@@ -34,4 +35,4 @@ class GenericDataset(Dataset):
         )
         input_ids = encoded_text["input_ids"]
         attention_mask = encoded_text["attention_mask"]
-        return input_ids, label, attention_mask
+        return input_ids, torch.Tensor(attention_mask), torch.Tensor([label])

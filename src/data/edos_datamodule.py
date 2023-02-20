@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional
 
 import pandas as pd
-import torch
 from components.Dataset import GenericDataset
 from downloader import GoogleDriveDownloader
 from file_preprocessing import FilePreprocessor
@@ -157,3 +156,10 @@ class EDOSDataModule(LightningDataModule):
             return 3
         elif self.hparams.task == "c":
             return 4
+
+
+if __name__ == "__main__":
+    test = EDOSDataModule()
+    test.prepare_data()
+    test.setup()
+    print("hello")

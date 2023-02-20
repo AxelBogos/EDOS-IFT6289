@@ -14,7 +14,7 @@ class SimpleBiLstmNet(nn.Module):
     ):
         super().__init__()
 
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        # self.embedding = nn.Embedding(vocab_size, embedding_dim)
         self.lstm = nn.LSTM(
             input_size=embedding_dim,
             hidden_size=hidden_dim,
@@ -27,7 +27,8 @@ class SimpleBiLstmNet(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, 1)
 
     def forward(self, x):
-        embedded = self.embedding(x)
+        # embedded = self.embedding(x)
+        embedded = x
         output, _ = self.lstm(embedded)
         pooled = torch.mean(output, dim=1)
         out = self.dropout(pooled)
