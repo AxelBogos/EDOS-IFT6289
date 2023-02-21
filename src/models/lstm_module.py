@@ -2,7 +2,8 @@ from typing import Any, List
 
 import pytorch_lightning as pl
 import torch
-from torchmetrics import F1Score, MaxMetric, MeanMetric
+from torchmetrics import MaxMetric, MeanMetric
+from torchmetrics.classification import MulticlassF1Score
 
 
 class LSTMModule(pl.LightningModule):
@@ -20,9 +21,9 @@ class LSTMModule(pl.LightningModule):
         self.criterion = torch.nn.BCEWithLogitsLoss()
 
         # metric objects for calculating and macro f1 across batches
-        self.train_f1 = F1Score(task="binary", average="macro")
-        self.val_f1 = F1Score(task="binary", average="macro")
-        self.test_f1 = F1Score(task="binary", average="macro")
+        self.train_f1 = MulticlassF1Score(num_classes=2, average="macro")
+        self.val_f1 = MulticlassF1Score(num_classes=2, average="macro")
+        self.test_f1 = MulticlassF1Score(num_classes=2, average="macro")
 
         # for averaging loss across batches
         self.train_loss = MeanMetric()
@@ -54,8 +55,8 @@ class LSTMModule(pl.LightningModule):
         # update and log metrics
         self.train_loss(loss)
         self.train_f1(preds, targets)
-        self.log("train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("train/f1", self.train_f1, on_step=False, on_epoch=True, prog_bar=True)
+        self.log("train/loss", self.train_loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log("train/f1", self.train_f1, on_step=True, on_epoch=True, prog_bar=True)
 
         # we can return here dict with any tensors
         # and then read it in some callback or in `training_epoch_end()` below
@@ -68,8 +69,8 @@ class LSTMModule(pl.LightningModule):
         # update and log metrics
         self.val_loss(loss)
         self.val_f1(preds, targets)
-        self.log("val/loss", self.val_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("val/f1", self.val_f1, on_step=False, on_epoch=True, prog_bar=True)
+        self.log("val/loss", self.val_loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log("val/f1", self.val_f1, on_step=True, on_epoch=True, prog_bar=True)
 
         return {"loss": loss, "preds": preds, "targets": targets}
 
@@ -86,8 +87,8 @@ class LSTMModule(pl.LightningModule):
         # update and log metrics
         self.test_loss(loss)
         self.test_f1(preds, targets)
-        self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("test/f1", self.test_f1, on_step=False, on_epoch=True, prog_bar=True)
+        self.log("test/loss", self.test_loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log("test/f1", self.test_f1, on_step=True, on_epoch=True, prog_bar=True)
 
         return {"loss": loss, "preds": preds, "targets": targets}
 
