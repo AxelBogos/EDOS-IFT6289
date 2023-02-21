@@ -2,12 +2,13 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import pandas as pd
-from components.Dataset import GenericDataset
-from downloader import GoogleDriveDownloader
-from file_preprocessing import FilePreprocessor
 from pytorch_lightning import LightningDataModule
-from text_processing import SpacyTokenizer, TextPreprocessor
 from torch.utils.data import DataLoader, Dataset
+
+from src.data.components.Dataset import GenericDataset
+from src.data.downloader import GoogleDriveDownloader
+from src.data.file_preprocessing import FilePreprocessor
+from src.data.text_processing import SpacyTokenizer, TextPreprocessor
 
 
 class EDOSDataModule(LightningDataModule):
@@ -159,7 +160,4 @@ class EDOSDataModule(LightningDataModule):
 
 
 if __name__ == "__main__":
-    test = EDOSDataModule()
-    test.prepare_data()
-    test.setup()
-    print("hello")
+    _ = EDOSDataModule()
